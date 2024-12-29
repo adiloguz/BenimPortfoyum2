@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enhanced Portfolio</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    /* Core Styles */
+    :root {
+      --primary: #1a73e8;
+      --secondary: #673ab7;
+      --accent: #ff4081;
+      --text: #333;
+      --light: #f9f9f9;
+      --dark: #222;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 70px;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background-color: var(--light);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Enhanced Typography */
+    h1, h2, h3 {
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    /* Navigation */
+    .menu-toggle {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 2000;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 4px 12px rgba(26, 115, 232, 0.2);
+    }
+
+    .menu-toggle:hover {
+      background-color: var(--secondary);
+      transform: scale(1.1);
+    }
+
+    .side-menu {
+      position: fixed;
+      top: 0;
+      left: -300px;
+      width: 300px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      transition: var(--transition);
+      z-index: 1500;
+    }
+
+    .side-menu.active {
+      left: 0;
+    }
+
+    .side-menu .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .side-menu ul {
+      margin-top: 4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .side-menu ul li a {
+      font-size: 1.2rem;
+      color: var(--text);
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+    }
+
+    .side-menu ul li a:hover {
+      background: rgba(26, 115, 232, 0.1);
+      color: var(--primary);
+      transform: translateX(10px);
+    }
+
+    /* Enhanced Hero Section */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 2rem 5%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='0.1' d='M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,213.3C1248,235,1344,213,1392,202.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") repeat-x bottom;
+      opacity: 0.1;
+      animation: wave 20s linear infinite;
+    }
+
+    @keyframes wave {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 4rem);
+      margin-bottom: 1rem;
+      animation: fadeIn 1s ease-out;
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2vw, 1.5rem);
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      animation: fadeIn 1s ease-out 0.3s backwards;
+    }
+
+    .hero-btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background-color: var(--accent);
+      color: white;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 30px;
+      transition: var(--transition);
+      animation: fadeIn 1s ease-out 0.6s backwards;
+      box-shadow: 0 4px 15px rgba(255, 64, 129, 0.3);
+    }
+
+    .hero-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(255, 64, 129, 0.4);
+    }
+
+    /* Enhanced Services Section */
+    .services {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 4rem 5%;
+    }
+
+    .service {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: var(--transition);
+    }
+
+    .service:hover {
+      transform: translateY(-10px);
+    }
+
+    .service:hover::before {
+      transform: scaleX(1);
+    }
+
+    .service i {
+      font-size: 3rem;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+    }
+
+    .service h3 {
+      color: var(--dark);
+      margin-bottom: 1rem;
+    }
+
+    .service-list {
+      text-align: left;
+      margin-top: 1.5rem;
+    }
+
+    .service-list li {
+      margin-bottom: 0.8rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .service-list li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+    }
+
+    /* Enhanced Portfolio Section */
+    .portfolio {
+      padding: 4rem 5%;
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .portfolio-item {
+      position: relative;
+      border-radius: 15px;
+      overflow: hidden;
+      aspect-ratio: 16/9;
+    }
+
+    .portfolio-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+
+    .portfolio-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(26, 115, 232, 0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: var(--transition);
+      padding: 2rem;
+      color: white;
+    }
+
+    .portfolio-item:hover .portfolio-overlay {
+      opacity: 1;
+    }
+
+    .portfolio-item:hover img {
+      transform: scale(1.1);
+    }
+
+    /* Enhanced Footer */
+    footer {
+      background: var(--dark);
+      color: white;
+      padding: 4rem 5% 2rem;
+      position: relative;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-section h3 {
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    .footer-section h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 2px;
+      background: var(--primary);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .social-links a {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      transition: var(--transition);
+    }
+
+    .social-links a:hover {
+      background: var(--primary);
+      transform: translateY(-5px);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Scroll to Top Button */
+    .scroll-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--primary);
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+      z-index: 1000;
+    }
+
+    .scroll-top.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .scroll-top:hover {
+      background: var(--secondary);
+      transform: translateY(-5px);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .service {
+        margin: 1rem;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .footer-section h3::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .social-links {
+        justify-content: center;
+      }
+      
+      /* Popup Stilleri */
+.developer-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    z-index: 2000;
+    max-width: 500px;
+    width: 90%;
+}
+
+.developer-popup.active {
+    display: block;
+    animation: popupIn 0.5s ease forwards;
+}
+
+@keyframes popupIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.popup-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 1rem;
+}
+
+.popup-header img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 1rem;
+    object-fit: cover;
+}
+
+.developer-info h2 {
+    color: var(--primary);
+    margin: 0;
+}
+
+.skill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.skill-tag {
+    background: var(--primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-top: 2rem;
+}
+
+.section-title h2 {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: -100rem;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title h2::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    width: 80%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+.section-title p {
+    color: var(--text);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    opacity: 0.8;
+}
+
+.section-title {
+    animation: fadeIn 1s ease-out;
+}
+
+.section-title h2::after {
+    animation: scaleIn 1s ease-out forwards;
+}
+
+@keyframes scaleIn {
+    from {
+        width: 0;
+    }
+    to {
+        width: 80%;
+    }
+}
+      
+      
+    }
+  </style>
+</head>
+<body>
+  <button class="menu-toggle"><i class="fas fa-bars"></i></button>
+  <div class="side-menu">
+    <button class="close-btn"><i class="fas fa-times"></i></button>
+    <ul>
+      <li><a href="#hero"><i class="fas fa-home"></i> Ana sayfa</a></li>
+      <li><a href="#services"><i class="fas fa-cogs"></i> Hizmetler</a></li>
+      <li><a href="#portfolio"><i class="fas fa-project-diagram"></i> Projeler</a></li>
+      <li><a href="#contact"><i class="fas fa-envelope"></i> İletişim</a></li>
+      <li><a href="#" id="developer-link"><i class="fas fa-code"></i> Geliştirici bilgisi</a></li>
+    </ul>
+  </div>
+
+  <section class="hero" id="hero">
+    <h1>Yaratıcı Dijital Çözümler</h1>
+    <p>Fikirleri olağanüstü dijital deneyimlere dönüştürüyoruz</p>
+    <a href="#portfolio" class="hero-btn">Projeleri Görüntüle</a>
+  </section>
+
+  <section id="services">
+    
+    <section id="services">
+    <div class="section-title">
+        <h2>Hizmetlerimiz</h2>
+    </div>
+    <div class="services">
+        <!-- Mevcut service div'leri -->
+    </div>
+</section>
+    
+    
+    
+    <div class="services">
+      <div class="service">
+        <i class="fas fa-mobile-alt"></i>
+        <h3>Mobil Geliştirme</h3>
+        <p>iOS ve Android platformları için yenilikçi çözümler üretiyoruz.</p>
+        <ul class="service-list">
+          <li>Kullanıcı Dostu Arayüz Tasarımı</li>
+          <li>Performans Optimizasyonu</li>
+          <li>Çapraz-Platform Desteği</li>
+        </ul>
+      </div>
+      <div class="service">
+        <i class="fas fa-code"></i>
+        <h3>Web Entegrasyonu</h3>
+        <p>Web ve mobil platformlar arasında kusursuz entegrasyon.</p>
+        <ul class="service-list">
+          <li>API Entegrasyonu</li>
+          <li>Duyarlı Tasarım</li>
+          <li>Veritabanı Yönetimi</li>
+        </ul>
+      </div>
+      <div class="service">
+        <i class="fas fa-tools"></i>
+        <h3>Bakım & Güncellemeler</h3>
+        <p>Projelerinizin güncel ve işlevsel kalmasını sağlıyoruz.</p>
+        <ul class="service-list">
+          <li>Hızlı Sorun Çözümü</li>
+          <li>Fonksiyonel Güncellemeler</li>
+          <li>Performans Güncellemeleri</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="portfolio" class="portfolio">
+    
+    <section id="portfolio" class="portfolio">
+    <div class="section-title">
+        <h2>Projeler</h2>
+    </div>
+    <div class="portfolio-grid">
+        <!-- Mevcut portfolio-item div'leri -->
+    </div>
+</section>
+    
+    
+    
+    <div class="portfolio-grid">
+      <div class="portfolio-item">
+        <img src="img/img1.jpg" alt="Project 1">
+        <div class="portfolio-overlay">
+          <h3>box.com projesi</h3>
+          <p>Kişisel tasarım</p>
+          <a href="https://adiloguz.github.io/WebsiteTasar-m/" class="hero-btn">Tasarımı görüntüle</a>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <img src="img/img2.jpg" alt="Project 2">
+        <div class="portfolio-overlay">
+          <h3>Ödeme ekranı projesi</h3>
+          <p>Şık dizayn</p>
+          <a href="https://adiloguz.github.io/BankaUygulamas-2/" class="hero-btn">Tasarımı görüntüle</a>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <img src="img/img3.jpg" alt="Project 3">
+        <div class="portfolio-overlay">
+          <h3>Kişisel Portföy projesi</h3>
+          <p>Animasyon ve hoş efektler</p>
+          <a href="https://adiloguz.github.io/AdilPortfoy/" class="hero-btn">Tasarımı görüntüle</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>Hakkımızda</h3>
+        <p>İşletmelerin modern dünyada büyümesine ve başarılı olmasına yardımcı olan yenilikçi dijital çözümler yaratıyoruz.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h3>İletişim Bilgileri</h3>
+        <p><i class="fas fa-phone"></i> +90 543 000 00 00</p>
+        <p><i class="fas fa-envelope"></i> adiloguz@github.io</p>
+        <p><i class="fas fa-map-marker-alt"></i>İstanbul, Türkiye</p>
+      </div>
+      <div class="footer-section">
+        <h3>Hızlı Erişim</h3>
+        <ul>
+          <li><a href="#hero">Ana Sayfa</a></li>
+          <li><a href="#services">Hizmetler</a></li>
+          <li><a href="#portfolio">Projeler</a></li>
+          <li><a href="#contact">İletişim</a></li>
+          
+        </ul>
+      </div>
+    </div>
+    <div class="copyright">
+      <p>&copy; 20204, Geliştirici Adil Oğuz </p>
+    </div>
+  </footer>
+
+  <button class="scroll-top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+  
+  <div class="developer-popup" id="developer-popup">
+    <button class="close-popup"><i class="fas fa-times"></i></button>
+    <div class="popup-header">
+        <img src="img/profile.jpg" alt="Geliştirici">
+        <div class="developer-info">
+            <h2>Adil Oğuz</h2>
+            <p>Front-End & Mobil uygulama Geliştiricisi</p>
+        </div>
+    </div>
+    <div class="popup-content">
+        <h3>Hakkımda</h3>
+        <p>5 yıllık deneyime sahip, yenilikçi teknolojilere tutkulu bir yazılım geliştiriciyim. Modern web teknolojileri ve mobil uygulama geliştirme konularında uzmanım.</p>
+        
+        <h3>Yetenekler</h3>
+        <div class="skill-list">
+            <span class="skill-tag">React</span>
+            <span class="skill-tag">Node.js</span>
+            <span class="skill-tag">TypeScript</span>
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">Flutter</span>
+            <span class="skill-tag">Kotlin</span>
+            <span class="skill-tag">React Native</span>
+            
+        </div>
+
+        <h3>İletişim</h3>
+        <p><i class="fas fa-envelope"></i> adil@github.io</p>
+        <p><i class="fab fa-github"></i> github.com/adiloguz</p>
+        <p><i class="fab fa-linkedin"></i> linkedin.com/in/adiloguz</p>
+    </div>
+</div>
+  
+  
+  
+
+  <script>
+    // Menu Toggle
+    const toggle = document.querySelector('.menu-toggle');
+    const sideMenu = document.querySelector('.side-menu');
+    const closeBtn = document.querySelector('.close-btn');
+
+    toggle.addEventListener('click', () => {
+      sideMenu.classList.add('active');
+      toggle.style.display = 'none';
+    });
+
+    closeBtn.addEventListener('click', () => {
+      sideMenu.classList.remove('active');
+      toggle.style.display = 'flex';
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!sideMenu.contains(e.target) && !toggle.contains(e.target) && sideMenu.classList.contains('active')) {
+        sideMenu.classList.remove('active');
+        toggle.style.display = 'flex';
+      }
+    });
+
+    // Scroll to Top Button
+    const scrollBtn = document.querySelector('.scroll-top');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        scrollBtn.classList.add('active');
+      } else {
+        scrollBtn.classList.remove('active');
+      }
+    });
+
+    scrollBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Smooth Scroll for Navigation Links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth'
+          });
+          
+          // Close menu if open
+          if (sideMenu.classList.contains('active')) {
+            sideMenu.classList.remove('active');
+            toggle.style.display = 'flex';
+          }
+        }
+      });
+    });
+
+    // Animation on Scroll
+    const revealElements = document.querySelectorAll('.service, .portfolio-item');
+
+    const revealOnScroll = () => {
+      revealElements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+
+        if (elementTop < windowHeight - 100) {
+          element.style.opacity = '1';
+          element.style.transform = 'translateY(0)';
+        }
+      });
+    };
+
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', revealOnScroll);
+    
+    const developerLink = document.getElementById('developer-link');
+const developerPopup = document.getElementById('developer-popup');
+const closePopup = document.querySelector('.close-popup');
+
+developerLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    developerPopup.classList.add('active');
+});
+
+closePopup.addEventListener('click', () => {
+    developerPopup.classList.remove('active');
+});
+
+// Popup dışına tıklandığında kapanma
+window.addEventListener('click', (e) => {
+    if (e.target === developerPopup) {
+        developerPopup.classList.remove('active');
+    }
+});
+    
+    
+    
+    
+    
+    
+    
+  </script>
+</body>
+</html>
